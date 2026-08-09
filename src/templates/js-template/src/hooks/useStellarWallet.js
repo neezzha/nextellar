@@ -41,11 +41,11 @@ export function useStellarWallet(horizonUrl = 'https://horizon-testnet.stellar.o
      */
     const connect = useCallback(async () => {
         try {
-            await kit.openModal({
+            await kit().openModal({
                 modalTitle: "Connect to your favorite wallet",
                 onWalletSelected: async (option) => {
-                    kit.setWallet(option.id);
-                    const { address } = await kit.getAddress();
+                    kit().setWallet(option.id);
+                    const { address } = await kit().getAddress();
                     const { name } = option;
                     setPublicKey(address);
                     setWalletName(name);
@@ -86,7 +86,7 @@ export function useStellarWallet(horizonUrl = 'https://horizon-testnet.stellar.o
      */
     const disconnect = useCallback(async () => {
         try {
-            await kit.disconnect();
+            await kit().disconnect();
             setConnected(false);
             setPublicKey(undefined);
             setWalletName(undefined);
@@ -166,7 +166,7 @@ export function useStellarWallet(horizonUrl = 'https://horizon-testnet.stellar.o
             txBuilder.setTimeout(30);
             const transaction = txBuilder.build();
             // Sign transaction using stellar-wallets-kit
-            const { signedTxXdr } = await kit.signTransaction(transaction.toXDR(), {
+            const { signedTxXdr } = await kit().signTransaction(transaction.toXDR(), {
                 address: publicKey,
                 networkPassphrase: network,
             });
@@ -192,8 +192,8 @@ export function useStellarWallet(horizonUrl = 'https://horizon-testnet.stellar.o
             const savedName = localStorage.getItem('stellar_wallet_name');
             if (wasConnected === 'true' && savedWalletId && savedAddress) {
                 try {
-                    kit.setWallet(savedWalletId);
-                    const { address } = await kit.getAddress();
+                    kit().setWallet(savedWalletId);
+                    const { address } = await kit().getAddress();
                     if (address === savedAddress) {
                         setPublicKey(address);
                         setWalletName(savedName || 'Unknown');
